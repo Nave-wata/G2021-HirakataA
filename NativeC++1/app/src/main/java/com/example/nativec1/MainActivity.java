@@ -15,8 +15,8 @@ public class MainActivity extends AppCompatActivity {
 
     static { System.loadLibrary("nativec1"); }
     public native String stringFromJNI();
-    private ActivityMainBinding binding;
 
+    private ActivityMainBinding binding;
     private static final int PERMISSION_RECORD_AUDIO = 1;
 
     @Override
@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Example of a call to a native method
-        TextView tv = findViewById(R.id.sample_text);
+        TextView tv = findViewById(R.id.button_id);
         tv.setText(stringFromJNI());
 
         checkRecordable();
