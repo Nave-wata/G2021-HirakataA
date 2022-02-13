@@ -25,6 +25,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     static {
         System.loadLibrary("nativec1");
     }
+
     public native String stringFromJNI();
 
     AudioRecord audioRec = null;
@@ -43,7 +44,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     int[] Base_Hz_sub = {0, 1, 2, 3, 7, 13, 25, 48, 94, 187, 373, 511};
     double[] vol_ary = {0.5, 0.526, 0.555, 0.588, 0.625, 0.666, 0.714, 0.769, 0.833, 0.909,
             1.0,
-            1.1, 1.2,   1.3,   1.4,   1.5,   1.6,   1.7,   1.8,   1.9,   2.0};
+            1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0};
     double[] vol = new double[10];
 
     /** Called when the activity is first created. */
@@ -62,6 +63,16 @@ public class MainActivity extends Activity implements View.OnClickListener {
         btn.setOnClickListener(this);
 
         // AudioRecordの作成
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         audioRec = new AudioRecord(
                 MediaRecorder.AudioSource.MIC,
                 SAMPLING_RATE,
