@@ -2,7 +2,6 @@ package com.example.nativec1;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.media.AudioFormat;
 import android.media.AudioManager;
@@ -12,15 +11,17 @@ import android.media.MediaRecorder;
 import android.os.Build;
 import android.os.Bundle;
 import android.speech.SpeechRecognizer;
-import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+
 import org.jtransforms.fft.DoubleFFT_1D;
 
-public class MainActivity extends Activity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     static {
         System.loadLibrary("nativec1");
@@ -46,8 +47,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
             1.0,
             1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0};
     double[] vol = new double[10];
-
-    /** Called when the activity is first created. */
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -90,6 +89,23 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 AudioTrack.MODE_STREAM
         );
 
+        class setOnSeekBarChangeListener implements SeekBar.OnSeekBarChangeListener {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        }
+
         // SeekBarのインスタンスを取得
         SeekBar seekBar1 = findViewById(R.id.seekBar_1);
         seekBar1.setMax(seekBarMax);
@@ -128,7 +144,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 // つまみが変更された時に処理が実行される
                 vol[0] = vol_ary[progress];
-                Log.v("SeekBar1", "progress" + vol[0]);
+                Log.v("SeekBar1", "progress" + vol[0] + ", " + seekBar);
             }
 
             @Override
@@ -149,7 +165,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 // つまみが変更された時に処理が実行される
                 vol[1] = vol_ary[progress];
-                Log.v("SeekBar2", "progress" + vol[1]);
+                Log.v("SeekBar2", "progress" + vol[1] + ", " + seekBar);
             }
 
             @Override
