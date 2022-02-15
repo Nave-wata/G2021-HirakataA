@@ -2,7 +2,6 @@ package com.example.nativec1;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.media.AudioFormat;
 import android.media.AudioManager;
@@ -12,42 +11,37 @@ import android.media.MediaRecorder;
 import android.os.Build;
 import android.os.Bundle;
 import android.speech.SpeechRecognizer;
-import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.SeekBar;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import org.jtransforms.fft.DoubleFFT_1D;
 
-public class MainActivity extends Activity implements View.OnClickListener {
 
-    static {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
+    static { // C++関連
         System.loadLibrary("nativec1");
     }
 
-    public native String stringFromJNI();
+    public native String stringFromJNI(); // C++のプロトタイプ宣言的なの
 
     AudioRecord audioRec = null;
     AudioTrack player = null;
     Button btn = null;
-
-    private static final int PERMISSION_RECORD_AUDIO = 1;
-    final static int SAMPLING_RATE = 44100;
     boolean bIsRecording = false;
-    int bufSize = 1024;
-    int seekBarMax = 20;
-    int seekBarProgress = 10;
+
+    final int PERMISSION_RECORD_AUDIO = 1;
+    final int SAMPLING_RATE = 44100;
+    final int bufSize = 1024;
+
     DoubleFFT_1D fft = new DoubleFFT_1D(bufSize);
 
-    int[] Base_Hz = {0, 2, 4, 6, 14, 26, 50, 96, 188, 374, 746, 1024};
-    int[] Base_Hz_sub = {0, 1, 2, 3, 7, 13, 25, 48, 94, 187, 373, 511};
-    double[] vol_ary = {0.5, 0.526, 0.555, 0.588, 0.625, 0.666, 0.714, 0.769, 0.833, 0.909,
-            1.0,
-            1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0};
-    double[] vol = new double[10];
-
-    /** Called when the activity is first created. */
+    static double[] vol_ary = {0.5, 0.526, 0.555, 0.588, 0.625, 0.666, 0.714, 0.769, 0.833, 0.909, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0};
+    static double[] vol = new double[10];
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -89,247 +83,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 bufSize,
                 AudioTrack.MODE_STREAM
         );
-
-        // SeekBarのインスタンスを取得
-        SeekBar seekBar1 = findViewById(R.id.seekBar_1);
-        seekBar1.setMax(seekBarMax);
-        seekBar1.setProgress(seekBarProgress);
-        SeekBar seekBar2 = findViewById(R.id.seekBar_2);
-        seekBar2.setMax(seekBarMax);
-        seekBar2.setProgress(seekBarProgress);
-        SeekBar seekBar3 = findViewById(R.id.seekBar_3);
-        seekBar3.setMax(seekBarMax);
-        seekBar3.setProgress(seekBarProgress);
-        SeekBar seekBar4 = findViewById(R.id.seekBar_4);
-        seekBar4.setMax(seekBarMax);
-        seekBar4.setProgress(seekBarProgress);
-        SeekBar seekBar5 = findViewById(R.id.seekBar_5);
-        seekBar5.setMax(seekBarMax);
-        seekBar5.setProgress(seekBarProgress);
-        SeekBar seekBar6 = findViewById(R.id.seekBar_6);
-        seekBar6.setMax(seekBarMax);
-        seekBar6.setProgress(seekBarProgress);
-        SeekBar seekBar7 = findViewById(R.id.seekBar_7);
-        seekBar7.setMax(seekBarMax);
-        seekBar7.setProgress(seekBarProgress);
-        SeekBar seekBar8 = findViewById(R.id.seekBar_8);
-        seekBar8.setMax(seekBarMax);
-        seekBar8.setProgress(seekBarProgress);
-        SeekBar seekBar9 = findViewById(R.id.seekBar_9);
-        seekBar9.setMax(seekBarMax);
-        seekBar9.setProgress(seekBarProgress);
-        SeekBar seekBar10 = findViewById(R.id.seekBar_10);
-        seekBar10.setMax(seekBarMax);
-        seekBar10.setProgress(seekBarProgress);
-
-        // SeekBarのつまみの変更を検知する
-        seekBar1.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                // つまみが変更された時に処理が実行される
-                vol[0] = vol_ary[progress];
-                Log.v("SeekBar1", "progress" + vol[0]);
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                // ユーザーがタップ開始した時に処理が実行される
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                // ユーザーがタップ終了した時に処理が実行される
-            }
-        });
-
-
-        // SeekBarのつまみの変更を検知する
-        seekBar2.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                // つまみが変更された時に処理が実行される
-                vol[1] = vol_ary[progress];
-                Log.v("SeekBar2", "progress" + vol[1]);
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                // ユーザーがタップ開始した時に処理が実行される
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                // ユーザーがタップ終了した時に処理が実行される
-            }
-        });
-
-
-        // SeekBarのつまみの変更を検知する
-        seekBar3.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                // つまみが変更された時に処理が実行される
-                vol[2] = vol_ary[progress];
-                Log.v("SeekBar3", "progress" + vol[2]);
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                // ユーザーがタップ開始した時に処理が実行される
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                // ユーザーがタップ終了した時に処理が実行される
-            }
-        });
-
-
-        // SeekBarのつまみの変更を検知する
-        seekBar4.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                // つまみが変更された時に処理が実行される
-                vol[3] = vol_ary[progress];
-                Log.v("SeekBar4", "progress" + vol[3]);
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                // ユーザーがタップ開始した時に処理が実行される
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                // ユーザーがタップ終了した時に処理が実行される
-            }
-        });
-
-
-        // SeekBarのつまみの変更を検知する
-        seekBar5.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                // つまみが変更された時に処理が実行される
-                vol[4] = vol_ary[progress];
-                Log.v("SeekBar5", "progress" + vol[4]);
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                // ユーザーがタップ開始した時に処理が実行される
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                // ユーザーがタップ終了した時に処理が実行される
-            }
-        });
-
-
-        // SeekBarのつまみの変更を検知する
-        seekBar6.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                // つまみが変更された時に処理が実行される
-                vol[5] = vol_ary[progress];
-                Log.v("SeekBar6", "progress" + vol[5]);
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                // ユーザーがタップ開始した時に処理が実行される
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                // ユーザーがタップ終了した時に処理が実行される
-            }
-        });
-
-
-        // SeekBarのつまみの変更を検知する
-        seekBar7.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                // つまみが変更された時に処理が実行される
-                vol[6] = vol_ary[progress];
-                Log.v("SeekBar7", "progress" + vol[6]);
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                // ユーザーがタップ開始した時に処理が実行される
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                // ユーザーがタップ終了した時に処理が実行される
-            }
-        });
-
-
-        // SeekBarのつまみの変更を検知する
-        seekBar8.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                // つまみが変更された時に処理が実行される
-                vol[7] = vol_ary[progress];
-                Log.v("SeekBar8", "progress" + vol[7]);
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                // ユーザーがタップ開始した時に処理が実行される
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                // ユーザーがタップ終了した時に処理が実行される
-            }
-        });
-
-
-        // SeekBarのつまみの変更を検知する
-        seekBar9.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                // つまみが変更された時に処理が実行される
-                vol[8] = vol_ary[progress];
-                Log.v("SeekBar9", "progress" + vol[8]);
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                // ユーザーがタップ開始した時に処理が実行される
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                // ユーザーがタップ終了した時に処理が実行される
-            }
-        });
-
-
-        // SeekBarのつまみの変更を検知する
-        seekBar10.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                // つまみが変更された時に処理が実行される
-                vol[9] = vol_ary[progress];
-                Log.v("SeekBar10", "progress" + vol[9]);
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                // ユーザーがタップ開始した時に処理が実行される
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                // ユーザーがタップ終了した時に処理が実行される
-            }
-        });
 
         checkRecordable();
     }
@@ -378,8 +131,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     }
                     // 録音停止
                     Log.v("AudioRecord", "stop");
-                    player.stop();
                     audioRec.stop();
+                    player.stop();
                 }).start();
                 btn.setText(R.string.running_label);
             }
@@ -390,14 +143,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
     protected void onDestroy() {
         super.onDestroy();
         audioRec.release();
+        player.release();
     }
 
-    protected byte[] Amplification(byte[] inputBuffer) {
+    private byte[] Amplification(byte[] inputBuffer) { // C++で実装予定
         double[] buf = new double[bufSize];
         byte[] outputBuffer = new byte[bufSize];
-        int i;
 
-        for (i = 0; i < bufSize; i++) {
+        for (int i = 0; i < bufSize; i++) {
             buf[i] = inputBuffer[i];
             buf[i] /= 2;
         }
@@ -409,35 +162,35 @@ public class MainActivity extends Activity implements View.OnClickListener {
         buf[3] *= vol[0];
         buf[4] *= vol[1];
         buf[5] *= vol[1];
-        for (i = 6; i <= 11; i++) {
+        for (int i = 6; i <= 11; i++) {
             buf[i] *= vol[2];
         }
-        for (i = 12; i <= 19; i++) {
+        for (int i = 12; i <= 19; i++) {
             buf[i] *= vol[3];
         }
-        for (i = 20; i <= 37; i++) {
+        for (int i = 20; i <= 37; i++) {
             buf[i] *= vol[4];
         }
-        for (i = 38; i <= 73; i++) {
+        for (int i = 38; i <= 73; i++) {
             buf[i] *= vol[5];
         }
-        for (i = 74; i <= 141; i++) {
+        for (int i = 74; i <= 141; i++) {
             buf[i] *= vol[6];
         }
-        for (i = 142; i <= 271; i++) {
+        for (int i = 142; i <= 271; i++) {
             buf[i] *= vol[7];
         }
-        for (i = 272; i <= 461; i++) {
+        for (int i = 272; i <= 461; i++) {
             buf[i] *= vol[8];
         }
-        for (i = 462; i <= 1023; i++) {
+        for (int i = 462; i <= 1023; i++) {
             buf[i] *= vol[9];
         }
 
         // 逆フーリエ変換
         fft.realInverse(buf, true);
 
-        for (i = 0; i < bufSize; i++) {
+        for (int i = 0; i < bufSize; i++) {
             if (120 < buf[i]) {
                 Log.v("i", "" + i + ", buf = " + buf[i]);
             }
