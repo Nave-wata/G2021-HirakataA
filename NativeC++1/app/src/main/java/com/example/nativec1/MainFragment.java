@@ -10,6 +10,7 @@ import android.widget.SeekBar;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+
 public class MainFragment extends Fragment {
     final int seekBarMax = 20;
     final int seekBarProgress = 10;
@@ -34,16 +35,18 @@ public class MainFragment extends Fragment {
         final SeekBar seekBar9 = view.findViewById(R.id.seekBar_9);
         final SeekBar seekBar10 = view.findViewById(R.id.seekBar_10);
 
-        final SeekBar[] seekBars = {seekBar1,
-                              seekBar2,
-                              seekBar3,
-                              seekBar4,
-                              seekBar5,
-                              seekBar6,
-                              seekBar7,
-                              seekBar8,
-                              seekBar9,
-                              seekBar10};
+        final SeekBar[] seekBars = {
+                seekBar1,
+                seekBar2,
+                seekBar3,
+                seekBar4,
+                seekBar5,
+                seekBar6,
+                seekBar7,
+                seekBar8,
+                seekBar9,
+                seekBar10
+        };
 
         final onSeekBarChangeListener sb = new onSeekBarChangeListener();
 
