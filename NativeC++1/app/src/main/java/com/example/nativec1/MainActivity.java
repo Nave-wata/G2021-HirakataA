@@ -14,38 +14,33 @@ import android.speech.SpeechRecognizer;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.SeekBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import org.jtransforms.fft.DoubleFFT_1D;
 
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    static {
+    static { // C++関連
         System.loadLibrary("nativec1");
     }
 
-    public native String stringFromJNI();
+    public native String stringFromJNI(); // C++のプロトタイプ宣言的なの
 
     AudioRecord audioRec = null;
     AudioTrack player = null;
     Button btn = null;
-
-    private static final int PERMISSION_RECORD_AUDIO = 1;
-    final static int SAMPLING_RATE = 44100;
     boolean bIsRecording = false;
-    int bufSize = 1024;
-    int seekBarMax = 20;
-    int seekBarProgress = 10;
+
+    final int PERMISSION_RECORD_AUDIO = 1;
+    final int SAMPLING_RATE = 44100;
+    final int bufSize = 1024;
+
     DoubleFFT_1D fft = new DoubleFFT_1D(bufSize);
 
-    int[] Base_Hz = {0, 2, 4, 6, 14, 26, 50, 96, 188, 374, 746, 1024};
-    int[] Base_Hz_sub = {0, 1, 2, 3, 7, 13, 25, 48, 94, 187, 373, 511};
-    static double[] vol_ary = {0.5, 0.526, 0.555, 0.588, 0.625, 0.666, 0.714, 0.769, 0.833, 0.909,
-            1.0,
-            1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0};
+    static double[] vol_ary = {0.5, 0.526, 0.555, 0.588, 0.625, 0.666, 0.714, 0.769, 0.833, 0.909, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0};
     static double[] vol = new double[10];
 
     @SuppressLint("SetTextI18n")
@@ -136,8 +131,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                     // 録音停止
                     Log.v("AudioRecord", "stop");
-                    player.stop();
                     audioRec.stop();
+                    player.stop();
                 }).start();
                 btn.setText(R.string.running_label);
             }
@@ -148,14 +143,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onDestroy() {
         super.onDestroy();
         audioRec.release();
+        player.release();
     }
 
-    protected byte[] Amplification(byte[] inputBuffer) {
+    private byte[] Amplification(byte[] inputBuffer) { // C++で実装予定
         double[] buf = new double[bufSize];
         byte[] outputBuffer = new byte[bufSize];
-        int i;
 
-        for (i = 0; i < bufSize; i++) {
+        for (int i = 0; i < bufSize; i++) {
             buf[i] = inputBuffer[i];
             buf[i] /= 2;
         }
@@ -167,35 +162,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buf[3] *= vol[0];
         buf[4] *= vol[1];
         buf[5] *= vol[1];
-        for (i = 6; i <= 11; i++) {
+        for (int i = 6; i <= 11; i++) {
             buf[i] *= vol[2];
         }
-        for (i = 12; i <= 19; i++) {
+        for (int i = 12; i <= 19; i++) {
             buf[i] *= vol[3];
         }
-        for (i = 20; i <= 37; i++) {
+        for (int i = 20; i <= 37; i++) {
             buf[i] *= vol[4];
         }
-        for (i = 38; i <= 73; i++) {
+        for (int i = 38; i <= 73; i++) {
             buf[i] *= vol[5];
         }
-        for (i = 74; i <= 141; i++) {
+        for (int i = 74; i <= 141; i++) {
             buf[i] *= vol[6];
         }
-        for (i = 142; i <= 271; i++) {
+        for (int i = 142; i <= 271; i++) {
             buf[i] *= vol[7];
         }
-        for (i = 272; i <= 461; i++) {
+        for (int i = 272; i <= 461; i++) {
             buf[i] *= vol[8];
         }
-        for (i = 462; i <= 1023; i++) {
+        for (int i = 462; i <= 1023; i++) {
             buf[i] *= vol[9];
         }
 
         // 逆フーリエ変換
         fft.realInverse(buf, true);
 
-        for (i = 0; i < bufSize; i++) {
+        for (int i = 0; i < bufSize; i++) {
             if (120 < buf[i]) {
                 Log.v("i", "" + i + ", buf = " + buf[i]);
             }

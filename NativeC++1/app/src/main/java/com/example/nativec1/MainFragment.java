@@ -1,5 +1,6 @@
 package com.example.nativec1;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,8 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 public class MainFragment extends Fragment {
-    int seekBarMax = 20;
-    int seekBarProgress = 10;
+    final int seekBarMax = 20;
+    final int seekBarProgress = 10;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -19,21 +20,21 @@ public class MainFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        SeekBar seekBar1 = view.findViewById(R.id.seekBar_1);
-        SeekBar seekBar2 = view.findViewById(R.id.seekBar_2);
-        SeekBar seekBar3 = view.findViewById(R.id.seekBar_3);
-        SeekBar seekBar4 = view.findViewById(R.id.seekBar_4);
-        SeekBar seekBar5 = view.findViewById(R.id.seekBar_5);
-        SeekBar seekBar6 = view.findViewById(R.id.seekBar_6);
-        SeekBar seekBar7 = view.findViewById(R.id.seekBar_7);
-        SeekBar seekBar8 = view.findViewById(R.id.seekBar_8);
-        SeekBar seekBar9 = view.findViewById(R.id.seekBar_9);
-        SeekBar seekBar10 = view.findViewById(R.id.seekBar_10);
+        final SeekBar seekBar1 = view.findViewById(R.id.seekBar_1);
+        final SeekBar seekBar2 = view.findViewById(R.id.seekBar_2);
+        final SeekBar seekBar3 = view.findViewById(R.id.seekBar_3);
+        final SeekBar seekBar4 = view.findViewById(R.id.seekBar_4);
+        final SeekBar seekBar5 = view.findViewById(R.id.seekBar_5);
+        final SeekBar seekBar6 = view.findViewById(R.id.seekBar_6);
+        final SeekBar seekBar7 = view.findViewById(R.id.seekBar_7);
+        final SeekBar seekBar8 = view.findViewById(R.id.seekBar_8);
+        final SeekBar seekBar9 = view.findViewById(R.id.seekBar_9);
+        final SeekBar seekBar10 = view.findViewById(R.id.seekBar_10);
 
-        SeekBar seekBars[] = {seekBar1,
+        final SeekBar[] seekBars = {seekBar1,
                               seekBar2,
                               seekBar3,
                               seekBar4,
@@ -44,7 +45,7 @@ public class MainFragment extends Fragment {
                               seekBar9,
                               seekBar10};
 
-        onSeekBarChangeListener sb = new onSeekBarChangeListener();
+        final onSeekBarChangeListener sb = new onSeekBarChangeListener();
 
         for (SeekBar seekBar: seekBars) {
             seekBar.setMax(seekBarMax);
@@ -54,9 +55,10 @@ public class MainFragment extends Fragment {
     }
 
     private class onSeekBarChangeListener implements SeekBar.OnSeekBarChangeListener {
+        @SuppressLint("NonConstantResourceId")
         @Override
         public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-            int id = seekBar.getId();
+            final int id = seekBar.getId();
             switch (id) {
                 case R.id.seekBar_1:
                     MainActivity.vol[0] = MainActivity.vol_ary[i];
