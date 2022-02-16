@@ -21,7 +21,7 @@ import androidx.core.app.ActivityCompat;
 import org.jtransforms.fft.DoubleFFT_1D;
 
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity {
 
     static { // C++関連
         System.loadLibrary("nativec1");
@@ -31,7 +31,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     AudioRecord audioRec = null;
     AudioTrack player = null;
-    Button btn = null;
     boolean bIsRecording = false;
 
     final int PERMISSION_RECORD_AUDIO = 1;
@@ -51,9 +50,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         for (int i = 0; i < 10; i++) {
             vol[i] = vol_ary[10];
         }
-
-        btn = findViewById(R.id.button_id);
-        btn.setOnClickListener(this);
 
         // AudioRecordの作成
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
@@ -79,33 +75,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         checkRecordable();
     }
 
-    @Override
-    public void onClick(View v) {
-        if (v == btn) {
-            if (bIsRecording) {
-                btn.setText(R.string.stopping_label);
-                bIsRecording = false;
-            } else {
-                // 録音開始
-                player.play();
-                audioRec.startRecording();
-                bIsRecording = true;
-                // 録音スレッド
-                new Thread(() -> {
-                    byte[] inputBuffer = new byte[bufSize];
-                    byte[] outputBuffer;
-                    while (bIsRecording) {
-                        // 録音データ読み込み
-                        audioRec.read(inputBuffer, 0, bufSize);
-                        outputBuffer = Amplification(inputBuffer);
-                        player.write(outputBuffer, 0, bufSize);
-                    }
-                    // 録音停止
-                    audioRec.stop();
-                    player.stop();
-                }).start();
-                btn.setText(R.string.running_label);
-            }
+    public void RunMethod() {
+        if (bIsRecording) {
+            bIsRecording = false;
+        } else {
+            // 録音開始
+            player.play();
+            audioRec.startRecording();
+            bIsRecording = true;
+            // 録音スレッド
+            new Thread(() -> {
+                byte[] inputBuffer = new byte[bufSize];
+                byte[] outputBuffer;
+                while (bIsRecording) {
+                    // 録音データ読み込み
+                    audioRec.read(inputBuffer, 0, bufSize);
+                    outputBuffer = Amplification(inputBuffer);
+                    player.write(outputBuffer, 0, bufSize);
+                }
+                // 録音停止
+                audioRec.stop();
+                player.stop();
+            }).start();
         }
     }
 
