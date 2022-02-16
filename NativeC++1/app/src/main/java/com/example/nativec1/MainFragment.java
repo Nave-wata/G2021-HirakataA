@@ -48,7 +48,7 @@ public class MainFragment extends Fragment {
                 seekBar10
         };
 
-        final onSeekBarChangeListener sb = new onSeekBarChangeListener();
+        final onSeekBarChangeListener sb = new onSeekBarChangeListener((MainActivity) getActivity());
 
         for (SeekBar seekBar: seekBars) {
             seekBar.setMax(seekBarMax);
@@ -58,40 +58,46 @@ public class MainFragment extends Fragment {
     }
 
     private class onSeekBarChangeListener implements SeekBar.OnSeekBarChangeListener {
+        MainActivity activity;
+
+        onSeekBarChangeListener(MainActivity activity) {
+            this.activity = activity;
+        }
+
         @SuppressLint("NonConstantResourceId")
         @Override
         public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
             final int id = seekBar.getId();
             switch (id) {
                 case R.id.seekBar_1:
-                    MainActivity.vol[0] = MainActivity.vol_ary[i];
+                    activity.vol[0] = activity.vol_ary[i];
                     break;
                 case R.id.seekBar_2:
-                    MainActivity.vol[1] = MainActivity.vol_ary[i];
+                    activity.vol[1] = activity.vol_ary[i];
                     break;
                 case R.id.seekBar_3:
-                    MainActivity.vol[2] = MainActivity.vol_ary[i];
+                    activity.vol[2] = activity.vol_ary[i];
                     break;
                 case R.id.seekBar_4:
-                    MainActivity.vol[3] = MainActivity.vol_ary[i];
+                    activity.vol[3] = activity.vol_ary[i];
                     break;
                 case R.id.seekBar_5:
-                    MainActivity.vol[4] = MainActivity.vol_ary[i];
+                    activity.vol[4] = activity.vol_ary[i];
                     break;
                 case R.id.seekBar_6:
-                    MainActivity.vol[5] = MainActivity.vol_ary[i];
+                    activity.vol[5] = activity.vol_ary[i];
                     break;
                 case R.id.seekBar_7:
-                    MainActivity.vol[6] = MainActivity.vol_ary[i];
+                    activity.vol[6] = activity.vol_ary[i];
                     break;
                 case R.id.seekBar_8:
-                    MainActivity.vol[7] = MainActivity.vol_ary[i];
+                    activity.vol[7] = activity.vol_ary[i];
                     break;
                 case R.id.seekBar_9:
-                    MainActivity.vol[8] = MainActivity.vol_ary[i];
+                    activity.vol[8] = activity.vol_ary[i];
                     break;
                 case R.id.seekBar_10:
-                    MainActivity.vol[9] = MainActivity.vol_ary[i];
+                    activity.vol[9] = activity.vol_ary[i];
                     break;
             }
         }

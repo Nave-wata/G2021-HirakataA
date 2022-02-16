@@ -37,8 +37,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     final int PERMISSION_RECORD_AUDIO = 1;
     final int SAMPLING_RATE = 44100;
     final int bufSize = 1024;
-    final static double[] vol_ary = {0.5, 0.526, 0.555, 0.588, 0.625, 0.666, 0.714, 0.769, 0.833, 0.909, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0};
-    static double[] vol = new double[10];
+    final double[] vol_ary = {0.5, 0.526, 0.555, 0.588, 0.625, 0.666, 0.714, 0.769, 0.833, 0.909, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0};
+    double[] vol = new double[10];
 
     DoubleFFT_1D fft = new DoubleFFT_1D(bufSize);
 
