@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.SeekBar;
 
 import androidx.annotation.NonNull;
@@ -55,9 +56,15 @@ public class MainFragment extends Fragment {
             seekBar.setProgress(seekBarProgress);
             seekBar.setOnSeekBarChangeListener(sb);
         }
+
+        final Button runBtn = view.findViewById(R.id.button_id);
+
+        final onClickListener bt = new onClickListener((MainActivity) getActivity());
+
+        runBtn.setOnClickListener(bt);
     }
 
-    private class onSeekBarChangeListener implements SeekBar.OnSeekBarChangeListener {
+    private static class onSeekBarChangeListener implements SeekBar.OnSeekBarChangeListener {
         MainActivity activity;
 
         onSeekBarChangeListener(MainActivity activity) {
@@ -68,6 +75,7 @@ public class MainFragment extends Fragment {
         @Override
         public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
             final int id = seekBar.getId();
+
             switch (id) {
                 case R.id.seekBar_1:
                     activity.vol[0] = activity.vol_ary[i];
@@ -99,6 +107,8 @@ public class MainFragment extends Fragment {
                 case R.id.seekBar_10:
                     activity.vol[9] = activity.vol_ary[i];
                     break;
+                default:
+                    break;
             }
         }
 
@@ -107,5 +117,37 @@ public class MainFragment extends Fragment {
 
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {}
+    }
+
+    private static class onClickListener implements View.OnClickListener {
+        MainActivity activity;
+
+        onClickListener(MainActivity activity) {
+            this.activity = activity;
+        }
+
+        @SuppressLint("NonConstantResourceId")
+        @Override
+        public void onClick(View v) {
+            final int id = v.getId();
+            final Button btn = v.findViewById(id);
+
+            switch (id) {
+                case R.id.button_id:
+                    ChangeRunText(btn);
+                    activity.RunMethod();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void ChangeRunText(Button btn) {
+            if (activity.bIsRecording) {
+                btn.setText(R.string.stopping_label);
+            } else {
+                btn.setText(R.string.running_label);
+            }
+        }
     }
 }
