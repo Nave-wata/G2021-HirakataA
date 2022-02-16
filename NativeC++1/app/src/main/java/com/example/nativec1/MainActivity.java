@@ -37,11 +37,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     final int PERMISSION_RECORD_AUDIO = 1;
     final int SAMPLING_RATE = 44100;
     final int bufSize = 1024;
+    final double[] vol_ary = {0.5, 0.526, 0.555, 0.588, 0.625, 0.666, 0.714, 0.769, 0.833, 0.909, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0};
+    double[] vol = new double[10];
 
     DoubleFFT_1D fft = new DoubleFFT_1D(bufSize);
-
-    static double[] vol_ary = {0.5, 0.526, 0.555, 0.588, 0.625, 0.666, 0.714, 0.769, 0.833, 0.909, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0};
-    static double[] vol = new double[10];
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -58,13 +57,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // AudioRecordの作成
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return;
         }
         audioRec = new AudioRecord(
@@ -87,8 +79,45 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         checkRecordable();
     }
 
+    @Override
+    public void onClick(View v) {
+        if (v == btn) {
+            if (bIsRecording) {
+                btn.setText(R.string.stopping_label);
+                bIsRecording = false;
+            } else {
+                // 録音開始
+                player.play();
+                audioRec.startRecording();
+                bIsRecording = true;
+                // 録音スレッド
+                new Thread(() -> {
+                    byte[] inputBuffer = new byte[bufSize];
+                    byte[] outputBuffer;
+                    while (bIsRecording) {
+                        // 録音データ読み込み
+                        audioRec.read(inputBuffer, 0, bufSize);
+                        outputBuffer = Amplification(inputBuffer);
+                        player.write(outputBuffer, 0, bufSize);
+                    }
+                    // 録音停止
+                    audioRec.stop();
+                    player.stop();
+                }).start();
+                btn.setText(R.string.running_label);
+            }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        audioRec.release();
+        player.release();
+    }
+
     @SuppressLint("ObsoleteSdkInt")
-    public void checkRecordable(){
+    private void checkRecordable() {
         if(!SpeechRecognizer.isRecognitionAvailable(getApplicationContext())) {
             return;
         }
@@ -104,46 +133,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         PERMISSION_RECORD_AUDIO);
             }
         }
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (v == btn) {
-            if (bIsRecording) {
-                btn.setText(R.string.stopping_label);
-                bIsRecording = false;
-            } else {
-                // 録音開始
-                Log.v("AudioRecord", "startRecording");
-                player.play();
-                audioRec.startRecording();
-                bIsRecording = true;
-                // 録音スレッド
-                new Thread(() -> {
-                    byte[] inputBuffer = new byte[bufSize];
-                    byte[] outputBuffer;
-                    while (bIsRecording) {
-                        // 録音データ読み込み
-                        audioRec.read(inputBuffer, 0, bufSize);
-                        outputBuffer = Amplification(inputBuffer);
-                        player.write(outputBuffer, 0, bufSize);
-                        // Log.v("AudioRecord", "read " + bufSize + " bytes");
-                    }
-                    // 録音停止
-                    Log.v("AudioRecord", "stop");
-                    audioRec.stop();
-                    player.stop();
-                }).start();
-                btn.setText(R.string.running_label);
-            }
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        audioRec.release();
-        player.release();
     }
 
     private byte[] Amplification(byte[] inputBuffer) { // C++で実装予定
