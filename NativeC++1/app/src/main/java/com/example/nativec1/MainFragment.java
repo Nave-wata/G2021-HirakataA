@@ -64,7 +64,7 @@ public class MainFragment extends Fragment {
         runBtn.setOnClickListener(bt);
     }
 
-    private class onSeekBarChangeListener implements SeekBar.OnSeekBarChangeListener {
+    private static class onSeekBarChangeListener implements SeekBar.OnSeekBarChangeListener {
         MainActivity activity;
 
         onSeekBarChangeListener(MainActivity activity) {
@@ -107,6 +107,8 @@ public class MainFragment extends Fragment {
                 case R.id.seekBar_10:
                     activity.vol[9] = activity.vol_ary[i];
                     break;
+                default:
+                    break;
             }
         }
 
@@ -117,13 +119,14 @@ public class MainFragment extends Fragment {
         public void onStopTrackingTouch(SeekBar seekBar) {}
     }
 
-    private class onClickListener implements View.OnClickListener {
+    private static class onClickListener implements View.OnClickListener {
         MainActivity activity;
 
         onClickListener(MainActivity activity) {
             this.activity = activity;
         }
 
+        @SuppressLint("NonConstantResourceId")
         @Override
         public void onClick(View v) {
             final int id = v.getId();
@@ -133,6 +136,8 @@ public class MainFragment extends Fragment {
                 case R.id.button_id:
                     ChangeRunText(btn);
                     activity.RunMethod();
+                    break;
+                default:
                     break;
             }
         }
