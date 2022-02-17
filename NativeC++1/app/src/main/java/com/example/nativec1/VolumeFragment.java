@@ -57,11 +57,11 @@ public class VolumeFragment extends Fragment {
         }
     }
 
-    public static VolumeFragment newInstance(String str){
+    public static VolumeFragment newInstance(int data) {
+        Bundle args = new Bundle();
+        args.putInt("DATA", data);
         VolumeFragment fragment = new VolumeFragment();
-        Bundle barg = new Bundle();
-        barg.putString("Message", str);
-        fragment.setArguments(barg);
+        fragment.setArguments(args);
         return fragment;
     }
 

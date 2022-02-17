@@ -14,4 +14,6 @@
     <string name="Hz_8">4005</string>
     <string name="Hz_9">8010</string>
     <string name="Hz_10">16020</string>
+    <string name="Volume">Volume</string>
+    <string name="UsersVolume">UsersVolume</string>
 </resources>

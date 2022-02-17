@@ -24,7 +24,7 @@ public class MainFragment extends Fragment {
 
         assert getFragmentManager() != null;
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.container, VolumeFragment.newInstance("home"));
+        fragmentTransaction.replace(R.id.container, UsersVolumeFragment.newInstance(R.string.UsersVolume));
         fragmentTransaction.commit();
     }
 
@@ -99,12 +99,12 @@ public class MainFragment extends Fragment {
         private void ChangeFragment() {
             if (switchFlag) {
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.container, UsersVolumeFragment.newInstance("usersVolume"));
+                fragmentTransaction.replace(R.id.container, UsersVolumeFragment.newInstance(R.string.UsersVolume));
                 fragmentTransaction.commit();
                 switchFlag = false;
             } else {
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.container, VolumeFragment.newInstance("volume"));
+                fragmentTransaction.replace(R.id.container, VolumeFragment.newInstance(R.string.Volume));
                 fragmentTransaction.commit();
                 switchFlag = true;
             }

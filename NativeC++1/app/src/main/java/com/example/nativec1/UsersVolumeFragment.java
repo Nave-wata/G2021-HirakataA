@@ -14,11 +14,11 @@ public class UsersVolumeFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_usersvolume, container, false);
     }
 
-    public static UsersVolumeFragment newInstance(String str){
+    public static UsersVolumeFragment newInstance(int data) {
+        Bundle args = new Bundle();
+        args.putInt("DATA", data);
         UsersVolumeFragment fragment = new UsersVolumeFragment();
-        Bundle barg = new Bundle();
-        barg.putString("Message", str);
-        fragment.setArguments(barg);
+        fragment.setArguments(args);
         return fragment;
     }
 }
