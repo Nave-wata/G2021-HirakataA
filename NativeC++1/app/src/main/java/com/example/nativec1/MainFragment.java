@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -33,14 +34,18 @@ public class MainFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         final Button runBtn = view.findViewById(R.id.button_id);
-        final onClickListener bt = new onClickListener((MainActivity) getActivity());
+        final ButtonOnClickListener bt = new ButtonOnClickListener((MainActivity) getActivity());
         runBtn.setOnClickListener(bt);
+
+        final ImageButton switchButton = view.findViewById(R.id.SwitchButton);
+        final ImageButtonOnClickListener ibt = new ImageButtonOnClickListener();
+        switchButton.setOnClickListener(ibt);
     }
 
-    private static class onClickListener implements View.OnClickListener {
+    private static class ButtonOnClickListener implements Button.OnClickListener {
         MainActivity activity;
 
-        onClickListener(MainActivity activity) {
+        ButtonOnClickListener(MainActivity activity) {
             this.activity = activity;
         }
 
@@ -65,6 +70,20 @@ public class MainFragment extends Fragment {
                 btn.setText(R.string.stopping_label);
             } else {
                 btn.setText(R.string.running_label);
+            }
+        }
+    }
+
+    private static class ImageButtonOnClickListener implements ImageButton.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            final int id = v.getId();
+
+            switch (id) {
+                case R.id.SwitchButton:
+                    break;
+                default:
+                    break;
             }
         }
     }
