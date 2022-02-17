@@ -1,6 +1,7 @@
 package com.example.nativec1;
 
 import android.annotation.SuppressLint;
+import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,8 @@ import android.widget.ImageButton;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+
+import java.util.Objects;
 
 
 public class MainFragment extends Fragment {
@@ -33,12 +36,16 @@ public class MainFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        AssetManager assetManager = Objects.requireNonNull(getActivity()).getAssets();
+        SetImage setImage = new SetImage(assetManager);
+
         final Button runBtn = view.findViewById(R.id.button_id);
         final ButtonOnClickListener bt = new ButtonOnClickListener((MainActivity) getActivity());
         runBtn.setOnClickListener(bt);
 
         final ImageButton switchButton = view.findViewById(R.id.SwitchButton);
         final ImageButtonOnClickListener ibt = new ImageButtonOnClickListener();
+        setImage.setImageButtonBitmapFromAsset(switchButton, "switch.png");
         switchButton.setOnClickListener(ibt);
     }
 
