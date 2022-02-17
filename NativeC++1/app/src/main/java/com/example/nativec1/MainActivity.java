@@ -73,31 +73,6 @@ public class MainActivity extends AppCompatActivity {
         checkRecordable();
     }
 
-    public void RunMethod() {
-        if (bIsRecording) {
-            bIsRecording = false;
-        } else {
-            // 録音開始
-            player.play();
-            audioRec.startRecording();
-            bIsRecording = true;
-            // 録音スレッド
-            new Thread(() -> {
-                byte[] inputBuffer = new byte[bufSize];
-                byte[] outputBuffer;
-                while (bIsRecording) {
-                    // 録音データ読み込み
-                    audioRec.read(inputBuffer, 0, bufSize);
-                    outputBuffer = Amplification(inputBuffer);
-                    player.write(outputBuffer, 0, bufSize);
-                }
-                // 録音停止
-                audioRec.stop();
-                player.stop();
-            }).start();
-        }
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -121,6 +96,31 @@ public class MainActivity extends AppCompatActivity {
                         },
                         PERMISSION_RECORD_AUDIO);
             }
+        }
+    }
+
+    public void RunMethod() {
+        if (bIsRecording) {
+            bIsRecording = false;
+        } else {
+            // 録音開始
+            player.play();
+            audioRec.startRecording();
+            bIsRecording = true;
+            // 録音スレッド
+            new Thread(() -> {
+                byte[] inputBuffer = new byte[bufSize];
+                byte[] outputBuffer;
+                while (bIsRecording) {
+                    // 録音データ読み込み
+                    audioRec.read(inputBuffer, 0, bufSize);
+                    outputBuffer = Amplification(inputBuffer);
+                    player.write(outputBuffer, 0, bufSize);
+                }
+                // 録音停止
+                audioRec.stop();
+                player.stop();
+            }).start();
         }
     }
 
