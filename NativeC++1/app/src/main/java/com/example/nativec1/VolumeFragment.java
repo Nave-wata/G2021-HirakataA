@@ -57,6 +57,14 @@ public class VolumeFragment extends Fragment {
         }
     }
 
+    public static VolumeFragment newInstance(String str){
+        VolumeFragment fragment = new VolumeFragment();
+        Bundle barg = new Bundle();
+        barg.putString("Message", str);
+        fragment.setArguments(barg);
+        return fragment;
+    }
+
     private static class onSeekBarChangeListener implements SeekBar.OnSeekBarChangeListener {
         MainActivity activity;
 
