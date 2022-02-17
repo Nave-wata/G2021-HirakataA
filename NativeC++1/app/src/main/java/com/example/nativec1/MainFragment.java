@@ -17,6 +17,7 @@ import java.util.Objects;
 
 
 public class MainFragment extends Fragment {
+    static boolean switchFlag = true;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,16 +82,31 @@ public class MainFragment extends Fragment {
         }
     }
 
-    private static class ImageButtonOnClickListener implements ImageButton.OnClickListener {
+    private class ImageButtonOnClickListener implements ImageButton.OnClickListener {
         @Override
         public void onClick(View v) {
             final int id = v.getId();
 
             switch (id) {
                 case R.id.SwitchButton:
+                    ChangeFragment();
                     break;
                 default:
                     break;
+            }
+        }
+
+        private void ChangeFragment() {
+            if (switchFlag) {
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.container, UsersVolumeFragment.newInstance("usersVolume"));
+                fragmentTransaction.commit();
+                switchFlag = false;
+            } else {
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.container, VolumeFragment.newInstance("volume"));
+                fragmentTransaction.commit();
+                switchFlag = true;
             }
         }
     }
