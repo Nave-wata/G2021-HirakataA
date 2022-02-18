@@ -8,5 +8,5 @@ import com.example.nativec1.db.usersvolume.UsersVolumeDao;
 
 @Database(entities = {UsersVolume.class}, version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
-    public abstract UsersVolumeDao usersInfoDao();
+    public abstract UsersVolumeDao usersVolumeDao();
 }
