@@ -98,11 +98,13 @@ public class MainFragment extends Fragment {
 
         private void ChangeFragment() {
             if (switchFlag) {
+                assert getFragmentManager() != null;
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.container, UsersVolumeFragment.newInstance(R.string.UsersVolume));
                 fragmentTransaction.commit();
                 switchFlag = false;
             } else {
+                assert getFragmentManager() != null;
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.container, VolumeFragment.newInstance(R.string.Volume));
                 fragmentTransaction.commit();
